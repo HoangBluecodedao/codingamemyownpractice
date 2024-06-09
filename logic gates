@@ -1,0 +1,88 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+char AND(char a, char b)
+{
+    if (a == '-' && b == '-') return '-';
+    else return '_';
+}
+char OR(char a, char b)
+{
+    if (a == '-' || b == '-') return '-';
+    else return '_';
+}
+char XOR(char a, char b)
+{
+    if (((a == '-' || b == '-')) && (a != b)) return '-';
+    else return '_';
+}                
+char NAND(char a, char b)
+{
+    if (!(a =='-' && b == '-')) return '-';
+    else return '_';
+}
+char NOR(char a, char b)
+{
+    if (!(a == '-' || b == '-')) return '-';
+    else return '_';
+}
+char NXOR(char a, char b)
+{
+    if (!((a == '-' || b == '-') && (a != b))) return '-';
+    else return '_';
+}
+
+int main()
+{
+    int n,m; 
+    scanf ("%d", &n); 
+    scanf ("%d", &m); 
+    char input_name[n][9]; 
+    char input_signal[n][1024]; 
+    for (int i = 0; i < n; i++) 
+    {
+        scanf("%s%s", input_name[i], input_signal[i]);
+    }
+    char output_name[m][9];
+    char output_gate[m][9];
+    char output_input1[m][9];
+    char output_input2[m][9];
+    for (int i = 0; i < m; i++) 
+    {
+        scanf("%s%s%s%s",output_name[i], output_gate[i], output_input1[i], output_input2[i]);
+    }
+ 
+    for (int i = 0; i < m; i++)
+    {
+        int input1_idx = -1, input2_idx = -1;
+        for (int j = 0; j < n; j++)
+        {
+            if (strcmp(output_input1[i], input_name[j]) == 0) input1_idx = j;
+            if (strcmp(output_input2[i], input_name[j]) == 0) input2_idx = j;
+        };
+        char output_data[1025]; 
+        int max_length = (strlen(input_signal[input1_idx]) > strlen(input_signal[input2_idx])) ? strlen(input_signal[input1_idx]) : strlen(input_signal[input2_idx]);
+        for (int j = 0; j < max_length; j++) 
+        {
+            char c1 = input_signal[input1_idx][j];
+            char c2 = input_signal[input2_idx][j]; 
+            if (strcmp(output_gate[i], "AND") == 0) {
+                output_data[j] = AND(c1, c2);
+            } else if (strcmp(output_gate[i], "OR") == 0) {
+                output_data[j] = OR(c1, c2);
+            } else if (strcmp(output_gate[i], "XOR") == 0) {
+                output_data[j] = XOR(c1, c2);
+            } else if (strcmp(output_gate[i], "NAND") == 0) {
+                output_data[j] = NAND(c1, c2);
+            } else if (strcmp(output_gate[i], "NOR") == 0) {
+                output_data[j] = NOR(c1, c2);
+            } else if (strcmp(output_gate[i], "NXOR") == 0) {
+                output_data[j] = NXOR(c1, c2);
+            }
+        }
+    printf("%s %s\n", output_name[i], output_data); 
+    }
+    return 0;
+}              
